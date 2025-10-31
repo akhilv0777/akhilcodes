@@ -1,4 +1,6 @@
-<?php require 'includes/header.php' ?>
+<?php
+require 'header.php';
+?>
 <section class="section">
   <div class="section-body">
     <div class="row mt-sm-4">
@@ -10,7 +12,7 @@
                 <div class="position-relative" onclick="document.getElementById('file-input').click();"
                   style="cursor:pointer">
                   <img id="profile-image" alt="image"
-                    src="uploads/<?php echo $user_data['profile_picture']; ?>"
+                    src="uploads/<?php // echo  $user_data['profile_picture'];  ?>"
                     class="rounded-circle author-box-picture">
                   <svg style="color: black;margin-left: -25px;" xmlns="http://www.w3.org/2000/svg"
                     width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -24,31 +26,23 @@
                   accept="image/*" onchange="previewImage(event)">
                 <div class="clearfix"></div>
                 <div class="author-box-name">
-                  <a href="#"><?php echo $user_data['name']; ?></a>
+                  <a href="#"><?php // echo $user_data['name']; ?></a>
                 </div>
-                <div class="author-box-job"><?php echo ($aboutData['title']); ?></div>
+                <div class="author-box-job"><?php // echo  ($aboutData['title']); 
+                                            ?></div>
                 <button type="submit" name="submit" value="profile_picture"
                   class="btn btn-success">Update</button>
               </form>
 
             </div>
           </div>
-          <script>
-            function previewImage(event) {
-              var reader = new FileReader();
-              reader.onload = function() {
-                document.getElementById('profile-image').src = reader.result;
-              }
-              reader.readAsDataURL(event.target.files[0]);
-            }
-          </script>
         </div>
         <div class="card">
           <div class="card-header">
             <h4>Change Password</h4>
           </div>
           <div class="card-body">
-            <form method="POST" action="code/auth.php" onsubmit="return validateForm()">
+            <form id="passwordResetForm">
               <div class="form-group">
                 <label for="old_password">Old Password</label>
                 <input id="old_password" type="password" class="form-control" name="old_password">
@@ -66,8 +60,7 @@
               <div class="form-group">
                 <label for="password-confirm">Confirm Password</label>
                 <input id="password-confirm" type="password" class="form-control"
-                  name="confirm_password"
-                  oninput="document.getElementById('confirm-password-error').style.display = (this.value !== document.getElementById('new_password').value) ? 'block' : 'none'">
+                  name="confirm_password" oninput="document.getElementById('confirm-password-error').style.display = (this.value !== document.getElementById('new_password').value) ? 'block' : 'none'">
                 <small id="confirm-password-error" style="color: red; display: none;">Passwords do not
                   match.</small>
               </div>
@@ -78,14 +71,6 @@
                 </a>
               </div>
             </form>
-            <script>
-              function validateForm() {
-                const passwordError = document.getElementById('password-error').style.display === 'none';
-                const confirmPasswordError = document.getElementById('confirm-password-error').style
-                  .display === 'none';
-                return passwordError && confirmPasswordError;
-              }
-            </script>
           </div>
         </div>
         <div class="card">
@@ -124,26 +109,6 @@
               </div>
             </form>
           </div>
-          <script>
-            let metaTagCount = 1;
-            document.getElementById("add-meta-tag").addEventListener("click", () => {
-              metaTagCount++;
-              const metaTagContainer = document.getElementById("meta-tags-container");
-              const newMetaTagDiv = document.createElement("div");
-              newMetaTagDiv.className = "meta-tag mb-3";
-              newMetaTagDiv.id = `meta-tag-${metaTagCount}`;
-              newMetaTagDiv.innerHTML =
-                `<label for="meta-type-${metaTagCount}" class="form-label">Meta Type:</label>
-                                    <input type="text" class="form-control" id="meta-type-${metaTagCount}" placeholder="Enter Meta Type">
-                                    <label for="meta-value-${metaTagCount}" class="form-label">Meta Value:</label>
-                                    <input type="text" class="form-control" id="meta-value-${metaTagCount}" placeholder="Enter Meta Value">
-                                    <button type="button" class="btn btn-danger btn-sm mt-2 remove-meta-tag">Remove</button>`;
-              metaTagContainer.appendChild(newMetaTagDiv);
-              newMetaTagDiv.querySelector(".remove-meta-tag").addEventListener("click", () => {
-                newMetaTagDiv.remove();
-              });
-            });
-          </script>
         </div>
 
       </div>
@@ -167,14 +132,16 @@
                     <div class="form-group col-md-6 col-12">
                       <label>Title</label>
                       <input type="text" name="title" class="form-control"
-                        value="<?php echo ($aboutData['title']); ?>">
+                        value="<?php // echo ($aboutData['title']); 
+                                ?>">
                     </div>
                     <div class="form-group col-md-6 col-12">
                       <label>Resume</label>
                       <input type="file" name="resume" class="form-control">
                     </div>
                   </div>
-                  <textarea name="about" id="editor"><?php echo ($aboutData['about']); ?></textarea>
+                  <textarea name="about" id="editor"><?php // echo  ($aboutData['about']); 
+                                                      ?></textarea>
                   <div class="card-footer text-right">
                     <button name="about_us" type="submit" class="btn btn-primary">Save
                       Changes</button>
@@ -193,61 +160,71 @@
                       <div class="form-group col-md-6 col-12">
                         <label>First Name</label>
                         <input type="text" name="first_name" class="form-control"
-                          value="<?php echo explode(" ", $user_data['name'])[0]; ?>">
+                          value="<?php // echo  explode(" ", $user_data['name'])[0]; 
+                                  ?>">
                       </div>
                       <div class="form-group col-md-6 col-12">
                         <label>Last Name</label>
                         <input type="text" name="last_name" class="form-control"
-                          value="<?php echo explode(" ", $user_data['name'])[1]; ?>">
+                          value="<?php // echo  explode(" ", $user_data['name'])[1]; 
+                                  ?>">
                       </div>
                     </div>
                     <div class="row">
                       <div class="form-group col-md-7 col-12">
                         <label>Email</label>
                         <input type="email" class="form-control" name="email"
-                          value="<?php echo $user_data['email']; ?>">
+                          value="<?php // echo  $user_data['email']; 
+                                  ?>">
                       </div>
                       <div class="form-group col-md-5 col-12">
                         <label>Phone</label>
                         <input type="tel" name="phone" class="form-control"
-                          value="<?php echo !empty($contact_details['phone']) ? $contact_details['phone'] : ''; ?>">
+                          value="<?php // echo  !empty($contact_details['phone']) ? $contact_details['phone'] : ''; 
+                                  ?>">
                       </div>
                     </div>
                     <div class="row">
                       <div class="form-group col-md-6 col-12">
                         <label>Date of birth</label>
                         <input type="date" name="dob" class="form-control"
-                          value="<?php echo !empty($contact_details['dob']) ? $contact_details['dob'] : ''; ?>">
+                          value="<?php // echo  !empty($contact_details['dob']) ? $contact_details['dob'] : ''; 
+                                  ?>">
                       </div>
                       <div class="form-group col-md-6 col-12">
                         <label>Village/Post/District</label>
                         <input type="" name="village" class="form-control"
-                          value="<?php echo !empty($contact_details['village']) ? $contact_details['village'] : ''; ?>">
+                          value="<?php // echo  !empty($contact_details['village']) ? $contact_details['village'] : ''; 
+                                  ?>">
                       </div>
                     </div>
                     <div class="row">
                       <div class="form-group col-md-12 col-12">
                         <label>City/Town</label>
                         <input type="text" name="city" class="form-control"
-                          value="<?php echo !empty($contact_details['city']) ? $contact_details['city'] : ''; ?>">
+                          value="<?php // echo  !empty($contact_details['city']) ? $contact_details['city'] : ''; 
+                                  ?>">
                       </div>
                     </div>
                     <div class="row">
                       <div class="form-group col-md-5 col-12">
                         <label>State</label>
                         <input type="text" name="state" class="form-control"
-                          value="<?php echo !empty($contact_details['state']) ? $contact_details['state'] : ''; ?>">
+                          value="<?php // echo  !empty($contact_details['state']) ? $contact_details['state'] : ''; 
+                                  ?>">
                       </div>
                       <div class="form-group col-md-7 col-12">
                         <label>ZIP Code</label>
                         <input type="text" name="zip" class="form-control"
-                          value="<?php echo !empty($contact_details['zip']) ? $contact_details['zip'] : ''; ?>">
+                          value="<?php // echo  !empty($contact_details['zip']) ? $contact_details['zip'] : ''; 
+                                  ?>">
                       </div>
                     </div>
                     <div class="row">
                       <div class="form-group col-md-12 col-12">
                         <label>Google Map Embed Link</label>
-                        <textarea name="location" class="form-control" rows="4"><?php echo !empty($contact_details['location']) ? $contact_details['location'] : ''; ?></textarea>
+                        <textarea name="location" class="form-control" rows="4"><?php // echo  !empty($contact_details['location']) ? $contact_details['location'] : ''; 
+                                                                                ?></textarea>
                       </div>
                     </div>
 
@@ -259,12 +236,15 @@
                             <div class="form-group col-md-6 col-12">
                               <label><input readonly class="border-0" type="text"
                                   name="contact_type[]"
-                                  value="<?php echo ucwords($key)  ?>"></label>
+                                  value="<?php // echo  ucwords($key)  
+                                          ?>"></label>
                               <a href="javascript:void(0);"
                                 class="btn btn-link text-danger delete-contact"
-                                data-key="<?php echo strtolower($key); ?>">Remove</a>
+                                data-key="<?php // echo  strtolower($key); 
+                                          ?>">Remove</a>
                               <input type="text" name="contact_value[]" class="form-control"
-                                value="<?php echo $value  ?>">
+                                value="<?php // echo  $value  
+                                        ?>">
                             </div>
                           <?php } ?>
                         <?php } ?>
@@ -304,57 +284,7 @@
   </div>
 </section>
 <script src="https://cdn.ckeditor.com/ckeditor5/36.0.1/classic/ckeditor.js"></script>
-<script>
-  ClassicEditor.create(document.querySelector('#editor'))
-</script>
-<?php require 'includes/footer.php' ?>
-<script>
-  $(document).ready(function() {
-    $('.delete-contact').click(function() {
-      if (!confirm('Are you sure you want to delete?')) {
-        return false;
-      }
-      var key = $(this).data('key');
-      $.ajax({
-        url: 'code/personal_details.php',
-        type: 'POST',
-        data: {
-          key: key
-        },
-        dataType: 'json',
-        success: function(response) {
-          if (response.success) {
-            alert('Contact deleted successfully.');
-            window.location.reload();
-          } else {
-            alert('Failed to delete contact. Please try again.');
-          }
-        },
-      });
-    });
-  });
-</script>
-
-
-<script>
-  document.getElementById('add-contact-btn').addEventListener('click', function() {
-    const contactDetailsList = document.getElementById('contact-details-list');
-    const newContactDetail = document.createElement('div');
-    newContactDetail.classList.add('row', 'contact-detail');
-    newContactDetail.innerHTML = `<div class="col-md-5 col-12 mb-3">
-                                          <label>Contact Type</label>
-                                          <input type="text" name="contact_type[]" class="form-control" placeholder="e.g. WhatsApp, Skype, etc.">
-                                      </div>
-                                      <div class="col-md-5 col-12 mb-3">
-                                          <label>Contact Value</label>
-                                          <input type="text" name="contact_value[]" class="form-control" placeholder="e.g. your phone number or ID">
-                                      </div>
-                                      <div class="col-md-2 col-12 mb-3 d-flex align-items-end">
-                                          <button type="button" class="btn btn-danger delete-btn">Delete</button>
-                                      </div>`;
-    newContactDetail.querySelector('.delete-btn').addEventListener('click', function() {
-      newContactDetail.remove();
-    });
-    contactDetailsList.appendChild(newContactDetail);
-  });
-</script>
+<?php 
+require 'footer.php'
+?>
+<script src="assets/js/profile.js"></script>

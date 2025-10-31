@@ -1,4 +1,4 @@
-<?php require 'includes/header.php' ?>
+<?php require 'header.php' ?>
 <link rel="stylesheet" href="assets/bundles/datatables/datatables.min.css">
 <section class="section">
   <div class="section-body">
@@ -169,7 +169,7 @@
   ClassicEditor
     .create(document.querySelector('#editor'))
 </script>
-<?php require 'includes/footer.php' ?>
+<?php require 'footer.php' ?>
 <script>
   $('#categorySelect').change(function() {
     if ($(this).val() === 'other') {

@@ -1,4 +1,4 @@
-<?php require 'includes/header.php' ?>
+<?php require 'header.php' ?>
 
 <section class="section">
   <div class="section-body">
@@ -293,7 +293,7 @@
     </div>
   </div>
 </section>
-<?php require 'includes/footer.php' ?>
+<?php require 'footer.php' ?>
 <script>
   $(document).ready(function() {
     $('.delete-resume').click(function() {
