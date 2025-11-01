@@ -64,8 +64,6 @@ function updateUser()
   if (!$userId) {
     sendResponse('error', null, 'Please login first!');
   }
-
-  // Get form data sent via $.serialize()
   parse_str(file_get_contents('php://input'), $data);
 
   try {
@@ -77,26 +75,40 @@ function updateUser()
       sendResponse('error', null, 'User not found');
     }
 
-    $oldPassword = $data['old_password'] ?? '';
-    $newPassword = $data['new_password'] ?? '';
-    $confirmPassword = $data['confirm_password'] ?? '';
+    if (isset($data['old_password']) && isset($data['new_password']) && isset($data['confirm_password'])) {
+      $oldPassword = $data['old_password'] ?? '';
+      $newPassword = $data['new_password'] ?? '';
+      $confirmPassword = $data['confirm_password'] ?? '';
+      if (!$oldPassword || !$newPassword || !$confirmPassword) {
+        sendResponse('error', null, 'All fields are required.');
+      }
+      if ($newPassword !== $confirmPassword) {
+        sendResponse('error', null, 'New password and confirm password do not match.');
+      }
+      if (!password_verify($oldPassword, $user['password'])) {
+        sendResponse('error', null, 'Old password does not match.');
+      }
+      $newHashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
+      $updateFields[] = 'password = ?';
+      $params[] = $newHashedPassword;
+    } elseif (isset($_FILES['profile_picture']) && $_FILES['profile_picture']['error'] == 0) {
+      $targetDir = '../uploads/';
+      $fileName = basename($_FILES['profile_picture']['name']);
+      $targetFilePath = $targetDir . $fileName;
 
-    if (!$oldPassword || !$newPassword || !$confirmPassword) {
-      sendResponse('error', null, 'All fields are required.');
+      if (move_uploaded_file($_FILES['profile_picture']['tmp_name'], $targetFilePath)) {
+        $updateFields[] = 'profile_picture = ?';
+        $params[] = $fileName;
+        echo json_encode(['success' => true, 'new_image' => $fileName]);
+        exit;
+      } else {
+        echo json_encode(['success' => false, 'message' => 'Failed to upload file.']);
+        exit;
+      }
+    } else {
+      echo json_encode(['success' => false, 'message' => 'invalid request' ]);
+      exit;
     }
-
-    if ($newPassword !== $confirmPassword) {
-      sendResponse('error', null, 'New password and confirm password do not match.');
-    }
-
-    if (!password_verify($oldPassword, $user['password'])) {
-      sendResponse('error', null, 'Old password does not match.');
-    }
-
-    // Hash new password
-    $newHashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
-    $updateFields[] = 'password = ?';
-    $params[] = $newHashedPassword;
 
     if (!$updateFields) {
       sendResponse('error', null, 'No fields to update');

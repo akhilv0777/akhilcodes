@@ -10,7 +10,7 @@ $user_id = $_SESSION['user_id'];
 <html lang="en">
 
 <head>
-  <title>Akhilesh - Admin Dashboard</title>
+  <title>Akhilesh <?php echo isset($page) ? ' - ' . $page : ''; ?></title>
   <meta charset="UTF-8">
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
   <link rel="stylesheet" href="assets/css/app.min.css">
@@ -19,10 +19,11 @@ $user_id = $_SESSION['user_id'];
   <link rel="stylesheet" href="assets/css/custom.css">
   <link rel="stylesheet" href="assets/bundles/izitoast/css/iziToast.min.css">
   <script src="assets/bundles/izitoast/js/iziToast.min.js"></script>
+  <?php headerCss(); ?>
 </head>
 
 <body>
-  <div class="loader"></div>
+  <!-- <div class="loader"></div> -->
   <div id="app">
     <div class="main-wrapper main-wrapper-1">
       <div class="navbar-bg"></div>

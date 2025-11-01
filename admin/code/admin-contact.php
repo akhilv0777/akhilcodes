@@ -1,12 +1,12 @@
 <?php
-session_start();
-require_once 'db_connection.php';
+require_once 'config.php';
 require_once 'function.php';
-require_once '../../mail_config.php';
+require_once 'mail_config.php';
 
 $user_ip = $_SERVER['REMOTE_ADDR'];
 $today = date('Y-m-d');
 
+/*
 if (isset($_POST['contact_form']) && $_POST['contact_form'] == 'contact_form') {
     // Sanitize inputs
     $name = htmlspecialchars(trim($_POST['nameContact']));
@@ -44,7 +44,7 @@ if (isset($_POST['contact_form']) && $_POST['contact_form'] == 'contact_form') {
     // Send acknowledgment email
     $mail = MailConfig::getMailer();
     $mail->addAddress($email, $name);
-    $mail->Subject = "Thank You for Contacting Us - $subject"; // Subject added here
+    $mail->Subject = "Thank You for Contacting Us - $subject";
     $mail->Body = "Hello $name,<br><br>Thank you for your message. We will respond soon.<br><br>Your message: $message";
     $mail->isHTML(true);
     $mail->send();
@@ -52,7 +52,7 @@ if (isset($_POST['contact_form']) && $_POST['contact_form'] == 'contact_form') {
     // Notify admin
     $mail->clearAddresses();
     $mail->addAddress($user_data['email']);
-    $mail->Subject = "New Contact Form Submission - $subject"; // Subject added here
+    $mail->Subject = "New Contact Form Submission - $subject"; 
     $mail->Body = "New message from $name:<br>Email: $email<br>Subject: $subject<br>Message: $message";
     $mail->send();
 
@@ -71,55 +71,55 @@ if (isset($_POST['contact_form']) && $_POST['contact_form'] == 'contact_form') {
     header('Location: ' . $_SERVER['HTTP_REFERER']);
     exit;
 }
-
+*/
 
 
 if (isset($_POST['contact_delete']) && $_POST['contact_delete'] == 'contact_delete' && isset($_POST['selected_ids']) && !empty($_POST['selected_ids'])) {
     $selected_ids = $_POST['selected_ids'];
     $ids_to_delete = implode(',', $selected_ids);
-    $query = "DELETE FROM contact_form WHERE id IN ($ids_to_delete)";
-    $result = $conn->query($query);
-    echo $result ? 'success' : 'error';
+    $query = "DELETE FROM $contacts_table WHERE id IN (?)";
+    $result = $db->query($query, [$ids_to_delete]);
+    sendResponse($result ? 'success' : 'error', null, $result ? 'Contacts deleted successfully.' : 'Failed to delete contacts.');
 }
 
 
-if (isset($_POST['send_reply'])) {
-    $id = (int)$_POST['message_id'];
-    $sql = "SELECT subject FROM contact_form WHERE id = ?";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("i", $id);
-    $stmt->execute();
-    $result = $stmt->get_result()->fetch_assoc();
-    $stmt->close();
+// if (isset($_POST['send_reply'])) {
+//     $id = (int)$_POST['message_id'];
+//     $sql = "SELECT subject FROM contact_form WHERE id = ?";
+//     $stmt = $conn->prepare($sql);
+//     $stmt->bind_param("i", $id);
+//     $stmt->execute();
+//     $result = $stmt->get_result()->fetch_assoc();
+//     $stmt->close();
 
-    $to = $_POST['to'];
-    $message = $_POST['message'];
-    $mail = MailConfig::getMailer();
+//     $to = $_POST['to'];
+//     $message = $_POST['message'];
+//     $mail = MailConfig::getMailer();
     
-    try {
-        $mail->addAddress($to);
-        $mail->isHTML(true);
-        $mail->Subject = 'Reply: ' . (!empty($result['subject']) ? $result['subject'] : 'for your message');
-        $mail->Body = $message;
+//     try {
+//         $mail->addAddress($to);
+//         $mail->isHTML(true);
+//         $mail->Subject = 'Reply: ' . (!empty($result['subject']) ? $result['subject'] : 'for your message');
+//         $mail->Body = $message;
 
-        if (!empty($_FILES['files']['name'][0])) {
-            foreach ($_FILES['files']['name'] as $key => $fileName) {
-                $fileTmpPath = $_FILES['files']['tmp_name'][$key];
-                $newFileName = 'attachment' . ($key + 1) . '.' . pathinfo($fileName, PATHINFO_EXTENSION);
-                if (move_uploaded_file($fileTmpPath, '../uploads/reply/' . $newFileName)) {
-                    $mail->addAttachment('../uploads/reply/' . $newFileName, $newFileName);
-                } else {
-                    $_SESSION['err'] = "Error uploading file: $fileName";
-                    break;
-                }
-            }
-        }
-        if ($mail->send()) {
-            $_SESSION['msg'] = "Reply sent!";
-        }
-    } catch (Exception $e) {
-        $_SESSION['err'] = "Mailer Error: {$mail->ErrorInfo}";
-    }
-    header('Location: ' . $_SERVER['HTTP_REFERER']);
-    exit();
-}
+//         if (!empty($_FILES['files']['name'][0])) {
+//             foreach ($_FILES['files']['name'] as $key => $fileName) {
+//                 $fileTmpPath = $_FILES['files']['tmp_name'][$key];
+//                 $newFileName = 'attachment' . ($key + 1) . '.' . pathinfo($fileName, PATHINFO_EXTENSION);
+//                 if (move_uploaded_file($fileTmpPath, '../uploads/reply/' . $newFileName)) {
+//                     $mail->addAttachment('../uploads/reply/' . $newFileName, $newFileName);
+//                 } else {
+//                     $_SESSION['err'] = "Error uploading file: $fileName";
+//                     break;
+//                 }
+//             }
+//         }
+//         if ($mail->send()) {
+//             $_SESSION['msg'] = "Reply sent!";
+//         }
+//     } catch (Exception $e) {
+//         $_SESSION['err'] = "Mailer Error: {$mail->ErrorInfo}";
+//     }
+//     header('Location: ' . $_SERVER['HTTP_REFERER']);
+//     exit();
+// }

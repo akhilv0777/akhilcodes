@@ -33,27 +33,50 @@ ClassicEditor.create(document.querySelector('#editor'))
 
 // ---------------------------------------------------------------------------------
 $(document).ready(function () {
-  $('#passwordResetForm').on('submit', function (e) {
+  // $('#passwordResetForm').on('submit', function (e) {
+  //   e.preventDefault();
+  //   if (!validateForm()) {
+  //     return;
+  //   }
+  //   $.ajax({
+  //     url: 'code/users.php',
+  //     type: 'PUT',
+  //     data: $(this).serialize(),
+  //     dataType: 'json',
+  //     contentType: false,
+  //     processData: false,
+  //     success: function (response) {
+  //       alert(response.message);
+  //     },
+  //     error: function (xhr, status, error) {
+  //       console.error('AJAX error:', status, error);
+  //       alert('An unexpected error occurred. Please try again later.');
+  //     }
+  //   });
+  // });
+  $('#profilePictureForm').on('submit', function (e) {
     e.preventDefault();
-    if (!validateForm()) {
-      return;
-    }
+    var formData = new FormData(this);
     $.ajax({
-      url: 'code/users.php',
-      type: 'PUT',
-      data: $(this).serialize(),
+      url: 'code/users.php', 
+      type: 'POST',
+      data: formData,
+      contentType: false,
+      processData: false,
       dataType: 'json',
-      success: function (response) {
-        if (response.success) {
-          alert('Password reset successfully.');
-          // window.location.href = 'login.php';
+      success: function (data) {
+        if (data.success) {
+          alert('Profile picture updated successfully!');
+          if (data.imageUrl) {
+            $('#profile-image').attr('src', data.imageUrl);
+          }
         } else {
-          alert('Failed to reset password. Please try again.');
+          alert('Error: ' + data.message);
         }
       },
       error: function (xhr, status, error) {
-        console.error('AJAX error:', status, error);
-        alert('An unexpected error occurred. Please try again later.');
+        console.error(error);
+        alert('Something went wrong while uploading.');
       }
     });
   });

@@ -8,11 +8,12 @@ require 'header.php';
         <div class="card author-box">
           <div class="card-body">
             <div class="author-box-center">
-              <form action="code/personal_details.php" method="post" enctype="multipart/form-data">
+              <form id="profilePictureForm" enctype="multipart/form-data">
                 <div class="position-relative" onclick="document.getElementById('file-input').click();"
                   style="cursor:pointer">
                   <img id="profile-image" alt="image"
-                    src="uploads/<?php // echo  $user_data['profile_picture'];  ?>"
+                    src="uploads/<?php // echo $user_data['profile_picture'];   
+                                  ?>"
                     class="rounded-circle author-box-picture">
                   <svg style="color: black;margin-left: -25px;" xmlns="http://www.w3.org/2000/svg"
                     width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -22,18 +23,17 @@ require 'header.php';
                     <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
                   </svg>
                 </div>
-                <input type="file" name="profile_picture" id="file-input" style="display: none;"
-                  accept="image/*" onchange="previewImage(event)">
+                <input type="file" name="profile_picture" id="file-input" style="display: none;" accept="image/*" onchange="previewImage(event)">
                 <div class="clearfix"></div>
                 <div class="author-box-name">
-                  <a href="#"><?php // echo $user_data['name']; ?></a>
+                  <a href="#"><?php // echo $user_data['name'];   
+                              ?></a>
                 </div>
-                <div class="author-box-job"><?php // echo  ($aboutData['title']); 
+                <div class="author-box-job"><? #php  echo  ($aboutData['title']);  
                                             ?></div>
                 <button type="submit" name="submit" value="profile_picture"
                   class="btn btn-success">Update</button>
               </form>
-
             </div>
           </div>
         </div>
@@ -284,7 +284,7 @@ require 'header.php';
   </div>
 </section>
 <script src="https://cdn.ckeditor.com/ckeditor5/36.0.1/classic/ckeditor.js"></script>
-<?php 
+<?php
 require 'footer.php'
 ?>
 <script src="assets/js/profile.js"></script>

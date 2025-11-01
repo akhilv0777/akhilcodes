@@ -26,18 +26,18 @@
                     <select class="form-control" name="category" id="categorySelect">
                       <option value="" disabled selected>Select Category</option>
                       <?php
-                      $query = "SELECT * FROM projects";
-                      $result = $conn->query($query);
-                      if ($result->num_rows > 0) :
-                        while ($row = $result->fetch_assoc()) :
-                          $details = unserialize($row['details']);
-                          if ($details['category'] == 'other') :
-                            echo '<option value="' . $details['other_category'] . '">' . $details['other_category'] . '</option>';
-                          else :
-                            echo '<option value="' . $details['category'] . '">' . $details['category'] . '</option>';
-                          endif;
-                        endwhile;
-                      endif;
+                      // $query = "SELECT * FROM projects";
+                      // $result = $conn->query($query);
+                      // if ($result->num_rows > 0) :
+                      //   while ($row = $result->fetch_assoc()) :
+                      //     $details = unserialize($row['details']);
+                      //     if ($details['category'] == 'other') :
+                      //       echo '<option value="' . $details['other_category'] . '">' . $details['other_category'] . '</option>';
+                      //     else :
+                      //       echo '<option value="' . $details['category'] . '">' . $details['category'] . '</option>';
+                      //     endif;
+                      //   endwhile;
+                      // endif;
                       ?>
                       <option value="other">Other</option>
                     </select>
@@ -108,6 +108,7 @@
                   </thead>
                   <tbody>
                     <?php
+                    /*
                     $query = "SELECT * FROM projects";
                     $result = $conn->query($query);
                     if ($result->num_rows > 0) :
@@ -152,7 +153,9 @@
                           </td>
                         </tr>
                       <?php endwhile; ?>
-                    <?php endif; ?>
+                    <?php endif;
+                    */
+                    ?>
                   </tbody>
                 </table>
               </div>
